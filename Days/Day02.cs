@@ -11,7 +11,7 @@ namespace Days
             Load("inputs/day02.txt");
         }
 
-        private bool isValidPassword(string pw, int min, int max, char pol)
+        private bool IsValidPassword(string pw, int min, int max, char pol)
         {
             int countedPol = 0;
             for(int i = 0; i < pw.Length; i++)
@@ -30,7 +30,7 @@ namespace Days
             foreach (string s in Input)
             {
                 string[] splitted = s.Split(new char[] { '-', ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
-                if (isValidPassword(splitted[3], int.Parse(splitted[0]), int.Parse(splitted[1]), splitted[2][0]))
+                if (IsValidPassword(splitted[3], int.Parse(splitted[0]), int.Parse(splitted[1]), splitted[2][0]))
                 {
                     validCount++;
                 }
