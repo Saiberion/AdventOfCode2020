@@ -24,9 +24,15 @@ namespace Days
             return ((countedPol >= min) && (countedPol <= max));
         }
 
+        private bool IsValidPasswordAdvanced(string pw, int idx1, int idx2, char pol)
+        {
+            return ((pw[idx1] == pol) && (pw[idx2] != pol)) || ((pw[idx1] != pol) && (pw[idx2] == pol));
+        }
+
         override public void Solve()
         {
             int validCount = 0;
+            int validCountAdvanced = 0;
             foreach (string s in Input)
             {
                 string[] splitted = s.Split(new char[] { '-', ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
@@ -34,9 +40,13 @@ namespace Days
                 {
                     validCount++;
                 }
+                if (IsValidPasswordAdvanced(splitted[3], int.Parse(splitted[0]) - 1, int.Parse(splitted[1]) - 1, splitted[2][0]))
+                {
+                    validCountAdvanced++;
+                }
             }
             Part1Solution = validCount.ToString();
-            Part2Solution = "TBD";
+            Part2Solution = validCountAdvanced.ToString();
         }
     }
 }
