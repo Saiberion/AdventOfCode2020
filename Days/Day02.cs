@@ -11,9 +11,31 @@ namespace Days
             Load("inputs/day02.txt");
         }
 
+        private bool isValidPassword(string pw, int min, int max, char pol)
+        {
+            int countedPol = 0;
+            for(int i = 0; i < pw.Length; i++)
+            {
+                if (pw[i] == pol)
+                {
+                    countedPol++;
+                }
+            }
+            return ((countedPol >= min) && (countedPol <= max));
+        }
+
         override public void Solve()
         {
-            Part1Solution = "TBD";
+            int validCount = 0;
+            foreach (string s in Input)
+            {
+                string[] splitted = s.Split(new char[] { '-', ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
+                if (isValidPassword(splitted[3], int.Parse(splitted[0]), int.Parse(splitted[1]), splitted[2][0]))
+                {
+                    validCount++;
+                }
+            }
+            Part1Solution = validCount.ToString();
             Part2Solution = "TBD";
         }
     }
