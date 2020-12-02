@@ -36,11 +36,15 @@ namespace Days
             foreach (string s in Input)
             {
                 string[] splitted = s.Split(new char[] { '-', ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
-                if (IsValidPassword(splitted[3], int.Parse(splitted[0]), int.Parse(splitted[1]), splitted[2][0]))
+                int i1 = int.Parse(splitted[0]);
+                int i2 = int.Parse(splitted[1]);
+                char c = splitted[2][0];
+                string p = splitted[3];
+                if (IsValidPassword(p, i1, i2, c))
                 {
                     validCount++;
                 }
-                if (IsValidPasswordAdvanced(splitted[3], int.Parse(splitted[0]) - 1, int.Parse(splitted[1]) - 1, splitted[2][0]))
+                if (IsValidPasswordAdvanced(p, i1 - 1, i2 - 1, c))
                 {
                     validCountAdvanced++;
                 }
