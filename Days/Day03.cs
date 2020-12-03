@@ -33,7 +33,7 @@ namespace Days
                 while (true)
                 {
                     x = (x + slopes[i][0]) % Input[y].Length;
-                    y = y + slopes[i][1];
+                    y += slopes[i][1];
                     if (y >= Input.Count)
                     {
                         break;
