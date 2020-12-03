@@ -23,7 +23,8 @@ namespace Days
                 new int[] { 7, 1 },
                 new int[] { 1, 2 }
             };
-            long[] trees = new long[slopes.Count];
+            int[] trees = new int[slopes.Count];
+            long treemultiply = 1;
 
             for (int i = 0; i < slopes.Count; i++)
             {
@@ -45,10 +46,11 @@ namespace Days
                         }
                     }
                 }
+                treemultiply *= trees[i];
             }
 
             Part1Solution = trees[1].ToString();
-            Part2Solution = (trees[0] * trees[1] * trees[2] * trees[3] * trees[4]).ToString();
+            Part2Solution = (treemultiply).ToString();
         }
     }
 }
