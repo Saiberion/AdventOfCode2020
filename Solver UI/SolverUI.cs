@@ -18,7 +18,7 @@ namespace Solver_UI
             new Day01() { Name = "Day 01", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = true },
             new Day02() { Name = "Day 02", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = true },
             new Day03() { Name = "Day 03", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = true },
-            new Day04() { Name = "Day 04", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = false },
+            new Day04() { Name = "Day 04", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = true },
             new Day05() { Name = "Day 05", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = false },
             new Day06() { Name = "Day 06", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = false },
             new Day07() { Name = "Day 07", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = false },
