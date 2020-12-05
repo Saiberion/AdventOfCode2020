@@ -13,7 +13,14 @@ namespace Days
 
         override public void Solve()
         {
-            Part1Solution = "TBD";
+            int maxSeatId = 0;
+            foreach(string s in Input)
+            {
+                string bin = s.Replace('F', '0').Replace('B', '1').Replace('L', '0').Replace('R', '1');
+                int seat = Convert.ToInt32(bin, 2);
+                maxSeatId = Math.Max(maxSeatId, seat);
+            }
+            Part1Solution = maxSeatId.ToString();
             Part2Solution = "TBD";
         }
     }
