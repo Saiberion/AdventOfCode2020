@@ -13,7 +13,29 @@ namespace Days
 
         override public void Solve()
         {
-            Part1Solution = "TBD";
+            int sumOfYesAnswersPerGroup = 0;
+            List<char> yesAnswers = new List<char>();
+            for (int i = 0; i < Input.Count; i++)
+            {
+                if (string.IsNullOrEmpty(Input[i]))
+                {
+                    // blank line --> new group
+                    sumOfYesAnswersPerGroup += yesAnswers.Count;
+                    yesAnswers = new List<char>();
+                }
+                else
+                {
+                    foreach (char c in Input[i])
+                    {
+                        if (!yesAnswers.Contains(c))
+                        {
+                            yesAnswers.Add(c);
+                        }
+                    }
+                }
+            }
+            sumOfYesAnswersPerGroup += yesAnswers.Count;
+            Part1Solution = sumOfYesAnswersPerGroup.ToString();
             Part2Solution = "TBD";
         }
     }
