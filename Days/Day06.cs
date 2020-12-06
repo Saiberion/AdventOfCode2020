@@ -13,7 +13,10 @@ namespace Days
 
         override public void Solve()
         {
+            int personCounter = 0;
+            Dictionary<char, int> groupAnswers = new Dictionary<char, int>();
             int sumOfYesAnswersPerGroup = 0;
+            int sumOfYesAnswersPerGroupAdvanced = 0;
             List<char> yesAnswers = new List<char>();
             for (int i = 0; i < Input.Count; i++)
             {
@@ -22,11 +25,30 @@ namespace Days
                     // blank line --> new group
                     sumOfYesAnswersPerGroup += yesAnswers.Count;
                     yesAnswers = new List<char>();
+
+                    foreach(KeyValuePair<char, int> kvp in groupAnswers)
+                    {
+                        if (kvp.Value == personCounter)
+                        {
+                            sumOfYesAnswersPerGroupAdvanced++;
+                        }
+                    }
+                    personCounter = 0;
+                    groupAnswers = new Dictionary<char, int>();
                 }
                 else
                 {
+                    personCounter++;
                     foreach (char c in Input[i])
                     {
+                        if (groupAnswers.ContainsKey(c))
+                        {
+                            groupAnswers[c]++;
+                        }
+                        else
+                        {
+                            groupAnswers.Add(c, 1);
+                        }
                         if (!yesAnswers.Contains(c))
                         {
                             yesAnswers.Add(c);
@@ -35,8 +57,16 @@ namespace Days
                 }
             }
             sumOfYesAnswersPerGroup += yesAnswers.Count;
+            foreach (KeyValuePair<char, int> kvp in groupAnswers)
+            {
+                if (kvp.Value == personCounter)
+                {
+                    sumOfYesAnswersPerGroupAdvanced++;
+                }
+            }
+
             Part1Solution = sumOfYesAnswersPerGroup.ToString();
-            Part2Solution = "TBD";
+            Part2Solution = sumOfYesAnswersPerGroupAdvanced.ToString();
         }
     }
 }
