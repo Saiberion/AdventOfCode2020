@@ -17,14 +17,12 @@ namespace Days
             Dictionary<char, int> groupAnswers = new Dictionary<char, int>();
             int sumOfYesAnswersPerGroup = 0;
             int sumOfYesAnswersPerGroupAdvanced = 0;
-            List<char> yesAnswers = new List<char>();
             for (int i = 0; i < Input.Count; i++)
             {
                 if (string.IsNullOrEmpty(Input[i]))
                 {
                     // blank line --> new group
-                    sumOfYesAnswersPerGroup += yesAnswers.Count;
-                    yesAnswers = new List<char>();
+                    sumOfYesAnswersPerGroup += groupAnswers.Count;
 
                     foreach(KeyValuePair<char, int> kvp in groupAnswers)
                     {
@@ -49,14 +47,10 @@ namespace Days
                         {
                             groupAnswers.Add(c, 1);
                         }
-                        if (!yesAnswers.Contains(c))
-                        {
-                            yesAnswers.Add(c);
-                        }
                     }
                 }
             }
-            sumOfYesAnswersPerGroup += yesAnswers.Count;
+            sumOfYesAnswersPerGroup += groupAnswers.Count;
             foreach (KeyValuePair<char, int> kvp in groupAnswers)
             {
                 if (kvp.Value == personCounter)
