@@ -8,6 +8,7 @@ namespace Days
     {
         public string Name { get; set; }
         public List<string> Within { get; set; }
+        public Dictionary<string, int> Content { get; set; }
     }
 
     public class Day07 : Day
@@ -58,7 +59,7 @@ namespace Days
                 {
                     foreach (string s2 in splitted2)
                     {
-                        //int amount = int.Parse(s2.Remove(1, s2.Length - 1));
+                        int amount = int.Parse(s2.Remove(1, s2.Length - 1));
                         string name = s2.Remove(0, 2);
                         Bag bag = null;
                         foreach(Bag g in bags)
