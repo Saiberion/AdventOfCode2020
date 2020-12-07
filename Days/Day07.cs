@@ -19,7 +19,7 @@ namespace Days
 
         private List<string> OuterBagNames;
 
-        private void getOuterBags(string bagName, List<Bag> bags)
+        private void GetOuterBags(string bagName, List<Bag> bags)
         {
             Bag bag = null;
             
@@ -39,7 +39,7 @@ namespace Days
                     if (!OuterBagNames.Contains(s))
                     {
                         OuterBagNames.Add(s);
-                        getOuterBags(s, bags);
+                        GetOuterBags(s, bags);
                     }
                 }
             }
@@ -58,7 +58,7 @@ namespace Days
                 {
                     foreach (string s2 in splitted2)
                     {
-                        int amount = int.Parse(s2.Remove(1, s2.Length - 1));
+                        //int amount = int.Parse(s2.Remove(1, s2.Length - 1));
                         string name = s2.Remove(0, 2);
                         Bag bag = null;
                         foreach(Bag g in bags)
@@ -71,9 +71,11 @@ namespace Days
                         }
                         if (bag == null)
                         {
-                            bag = new Bag();
-                            bag.Name = name;
-                            bag.Within = new List<string>();
+                            bag = new Bag
+                            {
+                                Name = name,
+                                Within = new List<string>()
+                            };
                             bags.Add(bag);
                         }
                         bag.Within.Add(splitted[0]);
@@ -82,7 +84,7 @@ namespace Days
             }
 
             OuterBagNames = new List<string>();
-            getOuterBags("shiny gold", bags);
+            GetOuterBags("shiny gold", bags);
 
             Part1Solution = OuterBagNames.Count.ToString();
             Part2Solution = "TBD";

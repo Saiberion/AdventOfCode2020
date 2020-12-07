@@ -11,12 +11,12 @@ namespace Days
             Load("inputs/day04.txt");
         }
 
-        private bool isPassportValid(Dictionary<string, string> p)
+        private bool IsPassportValid(Dictionary<string, string> p)
         {
             return p.ContainsKey("byr") && p.ContainsKey("iyr") && p.ContainsKey("eyr") && p.ContainsKey("hgt") && p.ContainsKey("hcl") && p.ContainsKey("ecl") && p.ContainsKey("pid");
         }
 
-        private bool isPassportDataValid(Dictionary<string, string> p)
+        private bool IsPassportDataValid(Dictionary<string, string> p)
         {
             int i;
 
@@ -72,7 +72,7 @@ namespace Days
                 else
                 {
                     string hex = p["hcl"].Remove(0, 1);
-                    if (!int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out i))
+                    if (!int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out _))
                     {
                         return false;
                     }
@@ -90,7 +90,7 @@ namespace Days
             }
             else
             {
-                if (!int.TryParse(p["pid"], System.Globalization.NumberStyles.Integer, null, out i))
+                if (!int.TryParse(p["pid"], System.Globalization.NumberStyles.Integer, null, out _))
                 {
                     return false;
                 }
@@ -136,10 +136,10 @@ namespace Days
 
             foreach(Dictionary<string, string> p in passports)
             {
-                if (isPassportValid(p))
+                if (IsPassportValid(p))
                 {
                     validPassports++;
-                    if (isPassportDataValid(p))
+                    if (IsPassportDataValid(p))
                     {
                         validPassportsAdvanced++;
                     }
