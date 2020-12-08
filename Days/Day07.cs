@@ -46,13 +46,57 @@ namespace Days
             }
         }
 
+        private int countBags(string bagName, List<Bag> bags)
+        {
+            int result = 0;
+            Bag bag = null;
+
+            foreach (Bag g in bags)
+            {
+                if (g.Name.Equals(bagName))
+                {
+                    bag = g;
+                    break;
+                }
+            }
+
+            foreach(KeyValuePair<string,int> kvp in bag.Content)
+            {
+                result += kvp.Value;
+                result += kvp.Value * countBags(kvp.Key, bags);
+            }
+            return result;
+        }
+
         override public void Solve()
         {
             List<Bag> bags = new List<Bag>();
+            Bag bag, bagContainer;
 
             foreach (string s in Input)
             {
                 string[] splitted = s.Split(new string[] { " bags contain " }, StringSplitOptions.RemoveEmptyEntries);
+
+                bag = null;
+                foreach (Bag g in bags)
+                {
+                    if (g.Name.Equals(splitted[0]))
+                    {
+                        bag = g;
+                        break;
+                    }
+                }
+                if (bag == null)
+                {
+                    bag = new Bag
+                    {
+                        Name = splitted[0],
+                        Within = new List<string>(),
+                        Content = new Dictionary<string, int>()
+                    };
+                    bags.Add(bag);
+                }
+                bagContainer = bag;
 
                 string[] splitted2 = splitted[1].Split(new string[] { " bag, ", " bags, ", " bag.", " bags." }, StringSplitOptions.RemoveEmptyEntries);
                 if (!splitted2[0].Equals("no other"))
@@ -61,7 +105,7 @@ namespace Days
                     {
                         int amount = int.Parse(s2.Remove(1, s2.Length - 1));
                         string name = s2.Remove(0, 2);
-                        Bag bag = null;
+                        bag = null;
                         foreach(Bag g in bags)
                         {
                             if (g.Name.Equals(name))
@@ -75,11 +119,13 @@ namespace Days
                             bag = new Bag
                             {
                                 Name = name,
-                                Within = new List<string>()
+                                Within = new List<string>(),
+                                Content = new Dictionary<string, int>()
                             };
                             bags.Add(bag);
                         }
                         bag.Within.Add(splitted[0]);
+                        bagContainer.Content.Add(bag.Name, amount);
                     }
                 }
             }
@@ -88,7 +134,7 @@ namespace Days
             GetOuterBags("shiny gold", bags);
 
             Part1Solution = OuterBagNames.Count.ToString();
-            Part2Solution = "TBD";
+            Part2Solution = countBags("shiny gold", bags).ToString();
         }
     }
 }
