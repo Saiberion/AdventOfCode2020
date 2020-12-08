@@ -11,6 +11,13 @@ namespace Days
         nop
     }
 
+    public enum EInstructionResult
+    {
+        looped,
+        finished,
+        running
+    }
+
     public class BootCode
     {
         public List<EBootCodeInstructions> Instructions { get; set; }
@@ -19,6 +26,7 @@ namespace Days
         public int Accumulator { get; set; }
 
         private int programCounter = 0;
+        private int fixedInstr = -1;
 
         public BootCode()
         {
@@ -48,28 +56,93 @@ namespace Days
             Executed.Add(false);
         }
 
-        public bool Next()
+        public EInstructionResult Next()
         {
-            if (Executed[programCounter])
+            try
             {
-                return true;
-            }
-            else
-            {
-                Executed[programCounter] = true;
-                switch (Instructions[programCounter])
+                if (Executed[programCounter])
                 {
-                    case EBootCodeInstructions.acc:
-                        Accumulator += Arguments[programCounter++];
-                        break;
-                    case EBootCodeInstructions.jmp:
-                        programCounter += Arguments[programCounter];
-                        break;
-                    case EBootCodeInstructions.nop:
-                        programCounter++;
-                        break;
+                    return EInstructionResult.looped;
                 }
-                return false;
+                else
+                {
+                    Executed[programCounter] = true;
+                    switch (Instructions[programCounter])
+                    {
+                        case EBootCodeInstructions.acc:
+                            Accumulator += Arguments[programCounter++];
+                            break;
+                        case EBootCodeInstructions.jmp:
+                            programCounter += Arguments[programCounter];
+                            break;
+                        case EBootCodeInstructions.nop:
+                            programCounter++;
+                            break;
+                    }
+                    return EInstructionResult.running;
+                }
+            }
+            catch
+            {
+                // should only happen when next step is beyond current instruction list
+                return EInstructionResult.finished;
+            }
+        }
+
+        public void Reset()
+        {
+            Accumulator = 0;
+            programCounter = 0;
+            for (int i = 0; i < Executed.Count; i++)
+            {
+                Executed[i] = false;
+            }
+        }
+
+        public void RunWithSelfRepair()
+        {
+            EInstructionResult res;
+            while (true)
+            {
+                while ((res = Next()) == EInstructionResult.running) ;
+                if (res == EInstructionResult.looped)
+                {
+                    Reset();
+                    if (fixedInstr != -1)
+                    {
+                        // restore fix
+                        if (Instructions[fixedInstr] == EBootCodeInstructions.jmp)
+                        {
+                            Instructions[fixedInstr] = EBootCodeInstructions.nop;
+                        }
+                        else if (Instructions[fixedInstr] == EBootCodeInstructions.nop)
+                        {
+                            Instructions[fixedInstr] = EBootCodeInstructions.jmp;
+                        }
+                    }
+
+                    // find next jmp/nop to fix
+                    for (int i = (fixedInstr + 1); i < Instructions.Count; i++)
+                    {
+                        if ((Instructions[i] == EBootCodeInstructions.jmp) || (Instructions[i] == EBootCodeInstructions.nop))
+                        {
+                            fixedInstr = i;
+                            if (Instructions[fixedInstr] == EBootCodeInstructions.jmp)
+                            {
+                                Instructions[fixedInstr] = EBootCodeInstructions.nop;
+                            }
+                            else if (Instructions[fixedInstr] == EBootCodeInstructions.nop)
+                            {
+                                Instructions[fixedInstr] = EBootCodeInstructions.jmp;
+                            }
+                            break;
+                        }
+                    }
+                }
+                else if (res == EInstructionResult.finished)
+                {
+                    return;
+                }
             }
         }
     }
@@ -89,10 +162,13 @@ namespace Days
                 code.AddInstruction(Input[i]);
             }
 
-            while (code.Next() == false) ;
-
+            while (code.Next() == EInstructionResult.running) ;
             Part1Solution = code.Accumulator.ToString();
-            Part2Solution = "TBD";
+
+            code.Reset();
+
+            code.RunWithSelfRepair();
+            Part2Solution = code.Accumulator.ToString();
         }
     }
 }
