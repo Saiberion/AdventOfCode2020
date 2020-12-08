@@ -20,50 +20,53 @@ namespace Days
 
         private List<string> OuterBagNames;
 
-        private void GetOuterBags(string bagName, List<Bag> bags)
+        private Bag FindOrCreateBag(string name, List<Bag> bags)
         {
             Bag bag = null;
-            
             foreach (Bag g in bags)
             {
-                if (g.Name.Equals(bagName))
+                if (g.Name.Equals(name))
                 {
                     bag = g;
                     break;
                 }
             }
-
-            if (bag != null)
+            if (bag == null)
             {
-                foreach (string s in bag.Within)
+                bag = new Bag
                 {
-                    if (!OuterBagNames.Contains(s))
-                    {
-                        OuterBagNames.Add(s);
-                        GetOuterBags(s, bags);
-                    }
+                    Name = name,
+                    Within = new List<string>(),
+                    Content = new Dictionary<string, int>()
+                };
+                bags.Add(bag);
+            }
+            return bag;
+        }
+
+        private void GetOuterBags(string bagName, List<Bag> bags)
+        {
+            Bag bag = FindOrCreateBag(bagName, bags);
+
+            foreach (string s in bag.Within)
+            {
+                if (!OuterBagNames.Contains(s))
+                {
+                    OuterBagNames.Add(s);
+                    GetOuterBags(s, bags);
                 }
             }
         }
 
-        private int countBags(string bagName, List<Bag> bags)
+        private int CountBags(string bagName, List<Bag> bags)
         {
             int result = 0;
-            Bag bag = null;
-
-            foreach (Bag g in bags)
-            {
-                if (g.Name.Equals(bagName))
-                {
-                    bag = g;
-                    break;
-                }
-            }
+            Bag bag = FindOrCreateBag(bagName, bags);
 
             foreach(KeyValuePair<string,int> kvp in bag.Content)
             {
                 result += kvp.Value;
-                result += kvp.Value * countBags(kvp.Key, bags);
+                result += kvp.Value * CountBags(kvp.Key, bags);
             }
             return result;
         }
@@ -77,25 +80,7 @@ namespace Days
             {
                 string[] splitted = s.Split(new string[] { " bags contain " }, StringSplitOptions.RemoveEmptyEntries);
 
-                bag = null;
-                foreach (Bag g in bags)
-                {
-                    if (g.Name.Equals(splitted[0]))
-                    {
-                        bag = g;
-                        break;
-                    }
-                }
-                if (bag == null)
-                {
-                    bag = new Bag
-                    {
-                        Name = splitted[0],
-                        Within = new List<string>(),
-                        Content = new Dictionary<string, int>()
-                    };
-                    bags.Add(bag);
-                }
+                bag = FindOrCreateBag(splitted[0], bags);
                 bagContainer = bag;
 
                 string[] splitted2 = splitted[1].Split(new string[] { " bag, ", " bags, ", " bag.", " bags." }, StringSplitOptions.RemoveEmptyEntries);
@@ -105,25 +90,7 @@ namespace Days
                     {
                         int amount = int.Parse(s2.Remove(1, s2.Length - 1));
                         string name = s2.Remove(0, 2);
-                        bag = null;
-                        foreach(Bag g in bags)
-                        {
-                            if (g.Name.Equals(name))
-                            {
-                                bag = g;
-                                break;
-                            }
-                        }
-                        if (bag == null)
-                        {
-                            bag = new Bag
-                            {
-                                Name = name,
-                                Within = new List<string>(),
-                                Content = new Dictionary<string, int>()
-                            };
-                            bags.Add(bag);
-                        }
+                        bag = FindOrCreateBag(name, bags);
                         bag.Within.Add(splitted[0]);
                         bagContainer.Content.Add(bag.Name, amount);
                     }
@@ -134,7 +101,7 @@ namespace Days
             GetOuterBags("shiny gold", bags);
 
             Part1Solution = OuterBagNames.Count.ToString();
-            Part2Solution = countBags("shiny gold", bags).ToString();
+            Part2Solution = CountBags("shiny gold", bags).ToString();
         }
     }
 }
