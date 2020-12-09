@@ -26,21 +26,48 @@ namespace Days
             return false;
         }
 
+        private long FindEncryptionWeakness(long nr, List<long>l)
+        {
+            long sum;
+            for (int a = 0; a < (l.Count - 1); a++)
+            {
+                sum = l[a];
+                long min = l[a], max = l[a];
+                for (int b = a + 1; b < l.Count; b++)
+                {
+                    min = Math.Min(min, l[b]);
+                    max = Math.Max(max, l[b]);
+                    sum += l[b];
+                    if (sum > nr)
+                    {
+                        break;
+                    }
+                    else if (sum == nr)
+                    {
+                        return min + max;
+                    }
+                }
+            }
+            return 0;
+        }
+
         override public void Solve()
         {
+            long nextNr = 0;
             List<long> encoding = new List<long>();
-            for(int i = 0; i < Input.Count; i++)
+            List<long> encodingComplete = new List<long>();
+            for (int i = 0; i < Input.Count; i++)
             {
+                encodingComplete.Add(long.Parse(Input[i]));
                 if (i < 25)
                 {
                     encoding.Add(long.Parse(Input[i]));
                 }
                 else
                 {
-                    long nextNr = long.Parse(Input[i]);
+                    nextNr = long.Parse(Input[i]);
                     if (!IsValidNumber(nextNr, encoding))
                     {
-                        Part1Solution = nextNr.ToString();
                         break;
                     }
                     else
@@ -51,7 +78,9 @@ namespace Days
                 }
             }
 
-            Part2Solution = "TBD";
+            Part1Solution = nextNr.ToString();
+
+            Part2Solution = FindEncryptionWeakness(nextNr, encodingComplete).ToString();
         }
     }
 }
