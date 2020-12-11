@@ -11,70 +11,73 @@ namespace Days
             Load("inputs/day11.txt");
         }
 
-        public int CountNeighboringOccupiedSeats(int x, int y, char[,] seatingArea)
+        public int CountOccupiedSeatsInSight(int x, int y, char[,] seatingArea, int distance, int seatLimit)
         {
             int occupied = 0;
 
-            if (((x - 1) >= 0) && ((y - 1) >= 0))
+            if (distance > 0)
             {
-                if (seatingArea[x - 1,y - 1] == '#')
+                if (((x - distance) >= 0) && ((y - distance) >= 0))
                 {
-                    occupied++;
+                    if (seatingArea[x - distance, y - distance] == '#')
+                    {
+                        occupied++;
+                    }
                 }
-            }
-            if ((y - 1) >= 0)
-            {
-                if (seatingArea[x, y - 1] == '#')
+                if ((y - distance) >= 0)
                 {
-                    occupied++;
+                    if (seatingArea[x, y - distance] == '#')
+                    {
+                        occupied++;
+                    }
                 }
-            }
-            if (((x + 1) < seatingArea.GetLength(0)) && ((y - 1) >= 0))
-            {
-                if (seatingArea[x + 1, y - 1] == '#')
+                if (((x + distance) < seatingArea.GetLength(0)) && ((y - distance) >= 0))
                 {
-                    occupied++;
+                    if (seatingArea[x + distance, y - distance] == '#')
+                    {
+                        occupied++;
+                    }
                 }
-            }
-            if ((x + 1) < seatingArea.GetLength(0))
-            {
-                if (seatingArea[x + 1, y] == '#')
+                if ((x + distance) < seatingArea.GetLength(0))
                 {
-                    occupied++;
+                    if (seatingArea[x + distance, y] == '#')
+                    {
+                        occupied++;
+                    }
                 }
-            }
-            if (((x + 1) < seatingArea.GetLength(0)) && ((y + 1) < seatingArea.GetLength(1)))
-            {
-                if (seatingArea[x + 1, y + 1] == '#')
+                if (((x + distance) < seatingArea.GetLength(0)) && ((y + distance) < seatingArea.GetLength(1)))
                 {
-                    occupied++;
+                    if (seatingArea[x + distance, y + distance] == '#')
+                    {
+                        occupied++;
+                    }
                 }
-            }
-            if ((y + 1) < seatingArea.GetLength(1))
-            {
-                if (seatingArea[x, y + 1] == '#')
+                if ((y + distance) < seatingArea.GetLength(1))
                 {
-                    occupied++;
+                    if (seatingArea[x, y + distance] == '#')
+                    {
+                        occupied++;
+                    }
                 }
-            }
-            if (((x - 1) >= 0) && ((y + 1) < seatingArea.GetLength(1)))
-            {
-                if (seatingArea[x - 1, y + 1] == '#')
+                if (((x - distance) >= 0) && ((y + distance) < seatingArea.GetLength(1)))
                 {
-                    occupied++;
+                    if (seatingArea[x - distance, y + distance] == '#')
+                    {
+                        occupied++;
+                    }
                 }
-            }
-            if ((x - 1) >= 0)
-            {
-                if (seatingArea[x - 1, y] == '#')
+                if ((x - distance) >= 0)
                 {
-                    occupied++;
+                    if (seatingArea[x - distance, y] == '#')
+                    {
+                        occupied++;
+                    }
                 }
             }
             return occupied;
         }
 
-        public char GetNextSeatState(int x, int y, char[,] seatingArea)
+        public char GetNextSeatState(int x, int y, char[,] seatingArea, int distance, int seatLimit)
         {
             char nextSeatState;
 
@@ -84,7 +87,7 @@ namespace Days
             }
             else
             {
-                int neighbors = CountNeighboringOccupiedSeats(x, y, seatingArea);
+                int neighbors = CountOccupiedSeatsInSight(x, y, seatingArea, distance, seatLimit);
                 if (seatingArea[x,y] == 'L')
                 {
                     if (neighbors == 0)
@@ -112,6 +115,8 @@ namespace Days
             return nextSeatState;
         }
 
+        //private int RunSeating(int distance, )
+
         override public void Solve()
         {
             char[,] seatingArea = new char[Input[0].Length, Input.Count];
@@ -138,7 +143,7 @@ namespace Days
                 {
                     for (int x = 0; x < oldSeatingArea.GetLength(0); x++)
                     {
-                        char newState = GetNextSeatState(x, y, oldSeatingArea);
+                        char newState = GetNextSeatState(x, y, oldSeatingArea, 1, 4);
                         if (newSeatingArea[x, y] != newState)
                         {
                             somethingChanged = true;
