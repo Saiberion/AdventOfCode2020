@@ -74,6 +74,112 @@ namespace Days
                     }
                 }
             }
+            else
+            {
+                for (int i = y; i > 0; i--)
+                {
+                    if (seatingArea[x, i - 1] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (seatingArea[x, i - 1] == 'L')
+                    {
+                        break;
+                    }
+                }
+
+                for (int i = y; i < (seatingArea.GetLength(1) - 1); i++)
+                {
+                    if (seatingArea[x, i + 1] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (seatingArea[x, i + 1] == 'L')
+                    {
+                        break;
+                    }
+                }
+
+                for (int i = x; i > 0; i--)
+                {
+                    if (seatingArea[i - 1, y] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (seatingArea[i - 1, y] == 'L')
+                    {
+                        break;
+                    }
+                }
+
+                for (int i = x; i < (seatingArea.GetLength(0) - 1); i++)
+                {
+                    if (seatingArea[i + 1, y] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (seatingArea[i + 1, y] == 'L')
+                    {
+                        break;
+                    }
+                }
+
+                for (int a = x, b = y; (a > 0) && (b > 0); a--, b--)
+                {
+                    if (seatingArea[a - 1, b - 1] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (seatingArea[a - 1, b - 1] == 'L')
+                    {
+                        break;
+                    }
+                }
+
+                for (int a = x, b = y; (a < (seatingArea.GetLength(0) - 1)) && (b < (seatingArea.GetLength(1) - 1)); a++, b++)
+                {
+                    if (seatingArea[a + 1, b + 1] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (seatingArea[a + 1, b + 1] == 'L')
+                    {
+                        break;
+                    }
+                }
+
+                for (int a = x, b = y; (a < (seatingArea.GetLength(0) - 1)) && (b > 0); a++, b--)
+                {
+                    if (seatingArea[a + 1, b - 1] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (seatingArea[a + 1, b - 1] == 'L')
+                    {
+                        break;
+                    }
+                }
+
+                for (int a = x, b = y; (a > 0) && (b < (seatingArea.GetLength(1) - 1)); a--, b++)
+                {
+                    if (seatingArea[a - 1, b + 1] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (seatingArea[a - 1, b + 1] == 'L')
+                    {
+                        break;
+                    }
+                }
+            }
             return occupied;
         }
 
@@ -101,7 +207,7 @@ namespace Days
                 }
                 else
                 {
-                    if (neighbors >= 4)
+                    if (neighbors >= seatLimit)
                     {
                         nextSeatState = 'L';
                     }
@@ -115,25 +221,13 @@ namespace Days
             return nextSeatState;
         }
 
-        //private int RunSeating(int distance, )
-
-        override public void Solve()
+        private int RunSeating(int distance, int seatLimit, char[,] seatingArea)
         {
-            char[,] seatingArea = new char[Input[0].Length, Input.Count];
             char[,] newSeatingArea;
             char[,] oldSeatingArea = null;
             int occupiedSeats = 0;
-
-            for (int y = 0; y < Input.Count; y++)
-            {
-                for (int x = 0; x < Input[y].Length; x++)
-                {
-                    seatingArea[x, y] = Input[y][x];
-                }
-            }
-
+            
             newSeatingArea = seatingArea.Clone() as char[,];
-
             bool somethingChanged = true;
             while (somethingChanged)
             {
@@ -143,7 +237,7 @@ namespace Days
                 {
                     for (int x = 0; x < oldSeatingArea.GetLength(0); x++)
                     {
-                        char newState = GetNextSeatState(x, y, oldSeatingArea, 1, 4);
+                        char newState = GetNextSeatState(x, y, oldSeatingArea, distance, seatLimit);
                         if (newSeatingArea[x, y] != newState)
                         {
                             somethingChanged = true;
@@ -157,15 +251,29 @@ namespace Days
             {
                 for (int x = 0; x < oldSeatingArea.GetLength(0); x++)
                 {
-                    if (newSeatingArea[x,y] == '#')
+                    if (newSeatingArea[x, y] == '#')
                     {
                         occupiedSeats++;
                     }
                 }
             }
+            return occupiedSeats;
+        }
 
-            Part1Solution = occupiedSeats.ToString();
-            Part2Solution = "TBD";
+        override public void Solve()
+        {
+            char[,] seatingArea = new char[Input[0].Length, Input.Count];
+            
+            for (int y = 0; y < Input.Count; y++)
+            {
+                for (int x = 0; x < Input[y].Length; x++)
+                {
+                    seatingArea[x, y] = Input[y][x];
+                }
+            }
+
+            Part1Solution = RunSeating(1, 4, seatingArea).ToString();
+            Part2Solution = RunSeating(0, 5, seatingArea).ToString();
         }
     }
 }
