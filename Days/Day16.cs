@@ -32,10 +32,10 @@ namespace Days
         override public void Solve()
         {
             int readSection = 0;
-            string[] splitted;
             List<TicketField> ticketFields = new List<TicketField>();
             List<int> myTicketValues = new List<int>();
             List<List<int>> nearbyTickets = new List<List<int>>();
+            List<List<int>> nearbyValidTickets = new List<List<int>>();
             foreach (string s in Input)
             {
                 if (string.IsNullOrEmpty(s))
@@ -44,6 +44,7 @@ namespace Days
                 }
                 else
                 {
+                    string[] splitted;
                     switch (readSection)
                     {
                         case 0:
@@ -100,16 +101,44 @@ namespace Days
             int errorRate = 0;
             foreach(List<int> l in nearbyTickets)
             {
+                bool isValid = true;
                 foreach(int i in l)
                 {
                     if (!validNumbers.Contains(i))
                     {
                         errorRate += i;
+                        isValid = false;
+                    }
+                }
+
+                if (isValid)
+                {
+                    nearbyValidTickets.Add(l);
+                }
+            }
+            Part1Solution = errorRate.ToString();
+
+            int[] matchingTicketfield = new int[ticketFields.Count];
+            for (int i = 0; i < ticketFields.Count; i++)
+            {
+                for (int a = 0; a < nearbyValidTickets.Count; a++)
+                {
+                    for (int b = 0; b < nearbyValidTickets[a].Count; b++)
+                    {
+                        bool valid = false;
+                        if (((nearbyValidTickets[a][b] >= ticketFields[i].Min1) && (nearbyValidTickets[a][b] <= ticketFields[i].Max1)) ||
+                            ((nearbyValidTickets[a][b] >= ticketFields[i].Min2) && (nearbyValidTickets[a][b] <= ticketFields[i].Max2)))
+                        {
+                            valid = true;
+                        }
+                        else
+                        {
+                            valid = false;
+                        }
                     }
                 }
             }
 
-            Part1Solution = errorRate.ToString();
             Part2Solution = "TBD";
         }
     }
