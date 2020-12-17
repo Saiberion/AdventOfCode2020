@@ -81,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Days\Days.csproj">
-      <Project>{dd9941af-9aed-4e75-8d27-65834182179d}</Project>
+      <Project>{d31235b1-c5d3-45de-9146-ca399cc55f89}</Project>
       <Name>Days</Name>
     </ProjectReference>
   </ItemGroup>
