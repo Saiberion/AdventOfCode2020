@@ -32,7 +32,7 @@ namespace Solver_UI
             new Day15() { Name = "Day 15", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = false },
             new Day16() { Name = "Day 16", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = true },
             new Day17() { Name = "Day 17", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = true },
-            new Day18() { Name = "Day 18", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = false },
+            new Day18() { Name = "Day 18", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = true },
             new Day19() { Name = "Day 19", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = false },
             new Day20() { Name = "Day 20", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = false },
             new Day21() { Name = "Day 21", StopWatch = new System.Diagnostics.Stopwatch(), Enabled = false },
